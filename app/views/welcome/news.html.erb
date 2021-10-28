@@ -1,0 +1,14 @@
+<div class="row row-cols-1 row-cols-md-3 py-2 ">
+  <% @news.each do |article| %>
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 mx-3 ">
+          <div class="card-header"  style="background-color: #a9a9a9;">
+            <%= article.title %> 
+          </div>
+          <div class="card-body" style="background-color: #d3d3d3;">
+            <p class="card-text" >Size: <%= article.description %><br> </p>
+          </div>
+        </div>
+      </div>
+  <% end %>
+</div>

@@ -21,6 +21,7 @@ Bundler.require(*Rails.groups)
 
 module Daily
   class Application < Rails::Application
+    config.web_console.permissions = '172.19.0.1'
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 

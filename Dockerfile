@@ -1,14 +1,35 @@
-FROM ruby:2.7.2
+FROM ruby:2.7.2-alpine
 
-RUN apt-get update -qq && apt-get -y install nodejs postgresql-client
+RUN apk add --update --virtual \
+    runtime-deps \ 
+    postgresql-client \
+    build-base \
+    libxml2-dev \ 
+    libxslt-dev \
+    nodejs \
+    yarn \
+    libffi \
+    readline \
+    build-base \
+    postgresql-dev \
+    libc-dev \
+    linux-headers \
+    readline-dev \
+    file \
+    imagemagick\
+    git \
+    tzdata \
+    && rm -rf /var/cache/apk/*
 
-RUN mkdir /project
-WORKDIR /project
+RUN mkdir /app
+WORKDIR /app
+COPY . /app/
 
-COPY Gemfile Gemfile.lock ./
-RUN gem install bundler --no-document
-RUN bundle install --no-binstubs --jobs $(nproc) --retry 3
+ENV BUNDLE_PATH /gems
+RUN yarn install
+RUN bundle install
 
-COPY . .
+ENTRYPOINT [ "bin/rails" ]
+CMD ["s", "-b", "0.0.0.0"]
 
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+EXPOSE 3000

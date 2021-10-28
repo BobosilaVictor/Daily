@@ -1,24 +1,25 @@
-version: '3'
+version: '3.8'
 
 services:
   db:
-    image: 'postgres:10-alpine'
+    image: 'postgres:latest'
     volumes:
-      - 'postgres:/var/lib/postgresql/data'
+      - 'databse:/var/lib/postgresql/data'
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PASSWORD=password
 
   web:
+    build: .
     depends_on:
       - 'db'
-    build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     ports:
       - '3000:3000'
     environment:
-      - DATABASE_HOST=db
+      - DATABASE_URL=postgres://postgres:password@db:5432/postgres
+    volumes:
+      - .:/app
 
 volumes:
-  postgres:
+  databse:
